@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Banco de Dados
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: rm93262
+      POSTGRES_PASSWORD: senha_muito_dificil
+      POSTGRES_DB: certificates_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Fila (RabbitMQ)
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: rm93262
+      RABBITMQ_DEFAULT_PASS: senha_muito_dificil
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # API
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api
+    environment:
+      DATABASE_URL: postgres://rm93262:senha_muito_dificil@db:5432/certificates_db
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_USER: rm93262
+      RABBITMQ_DEFAULT_PASS: senha_muito_dificil
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+
+  # Worker
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.worker
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_USER: rm93262
+      RABBITMQ_DEFAULT_PASS: senha_muito_dificil
+    depends_on:
+      - rabbitmq
+
+volumes:
+  db_data:
