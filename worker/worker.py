@@ -21,21 +21,27 @@ except FileNotFoundError:
 
 def gerar_pdf(dados, output_path):
     """
-    Substitui as variáveis no template HTML e gera um PDF.
+    Substitui as variáveis no template HTML, salva o HTML gerado e converte para PDF.
     """
     try:
         template = Template(template_html)
         html_content = template.render(dados)
         
+        # Salva o HTML renderizado para debug ou verificação futura
+        html_output_path = output_path.replace(".pdf", ".html")
+        with open(html_output_path, "w", encoding="utf-8") as html_file:
+            html_file.write(html_content)
+        print(f"HTML salvo com sucesso: {html_output_path}")
+        
         # Opções do pdfkit
         pdf_options = {
             'page-size': 'A4',
             'orientation': 'Landscape',
-            'margin-top': '100mm',
-            'margin-right': '0mm',
-            'margin-bottom': '0mm',
-            'margin-left': '0mm',
-            'encoding': "UTF-8",
+            'margin-top': '1000mm',
+            'margin-right': '10mm',
+            'margin-bottom': '10mm',
+            'margin-left': '10mm',
+            'encoding': "UTF-8"
         }
         
         # Gera o PDF a partir do HTML
@@ -53,10 +59,10 @@ def callback(ch, method, properties, body):
     dados["data_emissao"] = datetime.now().strftime("%d/%m/%Y")
 
     try:
-        # Define o caminho de saída do PDF
+        # Define o caminho de saída do PDF e HTML
         output_path = f"diplomas/{dados['nome']}_diploma.pdf"
         
-        # Gera o PDF
+        # Gera o PDF e salva o HTML
         gerar_pdf(dados, output_path)
         
         # Confirma o processamento da mensagem
