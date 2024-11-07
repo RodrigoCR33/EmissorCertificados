@@ -1,4 +1,4 @@
 pika
 pdfkit
 Jinja2
-wkhtmltopdf
+weasyprint

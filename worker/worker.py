@@ -37,11 +37,13 @@ def gerar_pdf(dados, output_path):
         pdf_options = {
             'page-size': 'A4',
             'orientation': 'Landscape',
-            'margin-top': '1000mm',
-            'margin-right': '10mm',
-            'margin-bottom': '10mm',
-            'margin-left': '10mm',
-            'encoding': "UTF-8"
+            'margin-top': '0mm',
+            'margin-right': '0mm',
+            'margin-bottom': '0mm',
+            'margin-left': '0mm',
+            'encoding': "UTF-8",
+            'quiet': '',
+            'disable-smart-shrinking': ''
         }
         
         # Gera o PDF a partir do HTML
