@@ -48,7 +48,7 @@ def criar_diploma():
             return jsonify({"error": f"Campo {field} é obrigatório"}), 400
 
     # Adiciona a data de emissão como a data atual
-    data["data_emissao"] = datetime.now().date()
+    data["data_emissao"] = datetime.now().strftime("%Y-%m-%d")
 
     # Salva os dados no banco de dados
     try:

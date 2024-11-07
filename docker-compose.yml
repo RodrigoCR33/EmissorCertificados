@@ -51,6 +51,8 @@ services:
       RABBITMQ_DEFAULT_PASS: senha_muito_dificil
     depends_on:
       - rabbitmq
+    volumes:
+      - ./diplomas:/app/diplomas
 
 volumes:
   db_data:
